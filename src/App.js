@@ -1,23 +1,30 @@
-import logo from './logo.svg';
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client';
+import {onError} from '@apollo/client/link/error'
 import './App.css';
+import GetCountries from './Component/GetCountries';
+
+const errorLink = onError(({graphqlErrors, networkError}) => {
+    if (graphqlErrors) {
+      graphqlErrors.map(({message, location, path}) => {
+        return (`Graphql error ${message}`);
+      })
+    }
+});
+
+const link = from([
+  errorLink,
+  new HttpLink({uri: "https://countries.trevorblades.com/"}),
+]);
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: link
+});
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <ApolloProvider client={client}>{" "}<GetCountries /></ApolloProvider>
     </div>
   );
 }
