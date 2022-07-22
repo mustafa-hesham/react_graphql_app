@@ -2,6 +2,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@ap
 import {onError} from '@apollo/client/link/error'
 import './App.css';
 import GetCountries from './Component/GetCountries';
+import Product from './Component/GetProducts';
 
 const errorLink = onError(({graphqlErrors, networkError}) => {
     if (graphqlErrors) {
@@ -24,7 +25,8 @@ const client = new ApolloClient({
 function App() {
   return (
     <div className="App">
-        <ApolloProvider client={client}>{" "}<GetCountries /></ApolloProvider>
+        {/* <ApolloProvider client={client}>{" "}<GetCountries /></ApolloProvider> */}
+        <Product />
     </div>
   );
 }
